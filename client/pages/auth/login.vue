@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-lg-8 m-auto">
-      <card :title="$t('login')">
+      <GlobalCard :title="$t('login')">
         <form @submit.prevent="login" @keydown="form.onKeydown($event)">
           <!-- Email -->
           <div class="form-group row">
@@ -25,29 +25,27 @@
           <div class="form-group row">
             <div class="col-md-3" />
             <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
+              <GlobalCheckbox v-model="remember" name="remember">
                 {{ $t('remember_me') }}
-              </checkbox>
+              </GlobalCheckbox>
 
-              <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
+              <Nuxt-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
                 {{ $t('forgot_password') }}
-              </router-link>
+              </Nuxt-link>
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-7 offset-md-3 d-flex">
               <!-- Submit Button -->
-              <v-button :loading="form.busy">
+              <GlobalButton :loading="form.busy" >
                 {{ $t('login') }}
-              </v-button>
+              </GlobalButton>
 
-              <!-- GitHub Login Button -->
-              <login-with-github />
             </div>
           </div>
         </form>
-      </card>
+      </GlobalCard>
     </div>
   </div>
 </template>
@@ -92,7 +90,7 @@ export default {
       await this.$store.dispatch('auth/fetchUser')
 
       // Redirect home.
-      this.$router.push({ name: 'home' })
+      this.$router.push('/')
     }
   }
 }

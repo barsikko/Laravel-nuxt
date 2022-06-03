@@ -9,7 +9,7 @@ module.exports = {
 
   env: {
     apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
-    appName: process.env.APP_NAME || 'Laravel Nuxt',
+    appName: process.env.APP_NAME || 'HOME',
     appLocale: process.env.APP_LOCALE || 'en',
     githubAuth: !!process.env.GITHUB_CLIENT_ID
   },
@@ -30,25 +30,32 @@ module.exports = {
   loading: { color: '#007bff' },
 
   router: {
-    middleware: ['locale', 'check-auth']
+    middleware: ['check-auth']
   },
 
   css: [
     { src: '~assets/sass/app.scss', lang: 'scss' }
   ],
 
+  components: [
+    '~/components',
+    { path: '~/components/global/', prefix: 'global' }
+  ],
+
   plugins: [
-    '~components/global',
     '~plugins/i18n',
     '~plugins/vform',
     '~plugins/axios',
     '~plugins/fontawesome',
     '~plugins/nuxt-client-init',
-    { src: '~plugins/bootstrap', mode: 'client' }
+    { src: '~plugins/bootstrap', mode: 'client' },
+    { src: '~/plugins/vue-datepicker', ssr: false },
   ],
 
   modules: [
-    '@nuxtjs/router'
+  /*  '@nuxtjs/router' */
+    '@nuxt/image',
+    '@nuxtjs/moment',
   ],
 
   build: {

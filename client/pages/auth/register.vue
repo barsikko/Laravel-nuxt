@@ -1,12 +1,12 @@
 <template>
   <div class="row">
     <div class="col-lg-8 m-auto">
-      <card v-if="mustVerifyEmail" :title="$t('register')">
+      <GlobalCard v-if="mustVerifyEmail" :title="$t('register')">
         <div class="alert alert-success" role="alert">
           {{ $t('verify_email_address') }}
         </div>
-      </card>
-      <card v-else :title="$t('register')">
+      </GlobalCard>
+      <GlobalCard v-else :title="$t('register')">
         <form @submit.prevent="register" @keydown="form.onKeydown($event)">
           <!-- Name -->
           <div class="form-group row">
@@ -49,16 +49,13 @@
           <div class="form-group row">
             <div class="col-md-7 offset-md-3 d-flex">
               <!-- Submit Button -->
-              <v-button :loading="form.busy">
+              <GlobalButton :loading="form.busy">
                 {{ $t('register') }}
-              </v-button>
-
-              <!-- GitHub Login Button -->
-              <login-with-github />
+              </GlobalButton>
             </div>
           </div>
         </form>
-      </card>
+      </GlobalCard>
     </div>
   </div>
 </template>

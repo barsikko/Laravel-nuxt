@@ -1,5 +1,5 @@
 <template>
-  <card :title="$t('your_info')">
+  <GlobalCard :title="$t('your_info')">
     <form @submit.prevent="update" @keydown="form.onKeydown($event)">
       <alert-success :form="form" :message="$t('info_updated')" />
 
@@ -24,13 +24,13 @@
       <!-- Submit Button -->
       <div class="form-group row">
         <div class="col-md-9 ml-md-auto">
-          <v-button :loading="form.busy" type="success">
+          <GlobalButton :loading="form.busy" type="success">
             {{ $t('update') }}
-          </v-button>
+          </GlobalButton>
         </div>
       </div>
     </form>
-  </card>
+  </GlobalCard>
 </template>
 
 <script>

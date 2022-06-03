@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'VButton',
+  name: 'Button',
 
   props: {
     type: {
