@@ -25,7 +25,7 @@
 - ./vendor/bin/sail up
 - ./vendor/bin/sail artisan migrate
 - ./vendor/bin/sail artisan db:seed
-- ln -s \$(pwd)/storage/app/images/ \$(pwd)/client/static/images
+- php artisan static:link
 
 Доступ в лк: admin@admin.com password
 Приложение доступно по адресу http://127.0.0.1:3000
