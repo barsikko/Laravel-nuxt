@@ -26,7 +26,7 @@
 - ./vendor/bin/sail artisan migrate
 - ./vendor/bin/sail artisan db:seed
 - php artisan static:link
-- npm tun dev
+- npm run dev
 
 Доступ в лк: 
 - admin@admin.com 
