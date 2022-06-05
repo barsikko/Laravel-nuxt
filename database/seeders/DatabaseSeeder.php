@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         if(!User::whereEmail('admin@admin.com')->exists()){
             User::factory(1)->create([
                 'name' => 'Admin',
+                'is_admin' => 1,
                 'email' => 'admin@admin.com',
             ]);
         }

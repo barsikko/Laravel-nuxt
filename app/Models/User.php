@@ -23,6 +23,7 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'is_admin',
         'password',
     ];
 
@@ -53,6 +54,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     protected $appends = [
         'photo_url',
     ];
+
+    public function isAdmin()
+    {
+        return $this->is_admin === 1;
+    }
 
     /**
      * Get the profile photo URL attribute.

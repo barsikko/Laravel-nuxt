@@ -20,6 +20,11 @@
               {{ $t('settings') }}
             </NuxtLink>
 
+            <NuxtLink v-if="isAdmin" to="/settings/news" class="dropdown-item pl-3">
+              <fa icon="cog" fixed-width />
+              {{ $t('news') }}
+            </NuxtLink>
+
             <div class="dropdown-divider" />
             <a class="dropdown-item pl-3" href="#" @click.prevent="logout">
               <fa icon="sign-out-alt" fixed-width />
@@ -54,9 +59,14 @@ export default {
     appName: process.env.appName
   }),
 
-  computed: mapGetters({
-    user: 'auth/user'
-  }),
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    }),
+    isAdmin () {
+      return this.user?.is_admin
+    }
+  },
 
   methods: {
     async logout () {

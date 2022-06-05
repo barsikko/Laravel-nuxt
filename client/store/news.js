@@ -29,42 +29,26 @@ export const mutations = {
 
 export const actions = {
   async fetchNews ({ commit }) {
-    try {
-      const { data } = await axios.get('/news')
+    const { data } = await axios.get('/news')
 
-      commit('FETCH_NEWS_SUCCESS', data.data)
-    } catch (e) {
-      console.log(e)
-    }
+    commit('FETCH_NEWS_SUCCESS', data.data)
   },
 
   async deleteNews ({ commit }, { news }) {
-    try {
-      await axios.delete('news/' + news.id)
+    await axios.delete('news/' + news.id)
 
-      commit('DELETE_NEWS', news)
-    } catch (e) {
-      console.log(e)
-    }
+    commit('DELETE_NEWS', news)
   },
 
   async updateNews ({ commit }, { news }) {
-    try {
-      const { data } = await axios.put('news/' + news.id, news)
+    const { data } = await axios.put('news/' + news.id, news)
 
-      commit('UPDATE_NEWS', data.data)
-    } catch (e) {
-      console.log(e)
-    }
+    commit('UPDATE_NEWS', data.data)
   },
 
   async createNews ({ commit }, { news }) {
-    try {
-      const { data } = await axios.post('news', news)
+    const { data } = await axios.post('news', news)
 
-      commit('CREATE_NEWS', data.data)
-    } catch (e) {
-      console.log(e)
-    }
+    commit('CREATE_NEWS', data.data)
   }
 }

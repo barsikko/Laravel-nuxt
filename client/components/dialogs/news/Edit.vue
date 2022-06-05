@@ -6,11 +6,27 @@
           <img class="close-img" src="~/assets/close-96.svg" alt="" @click="$emit('close-modal')">
         </div>
         <div class="modal-body p-5">
-          <form @submit.prevent="save()" >
+          <form @submit.prevent="save()">
             <div class="form-group">
               <label>Title</label>
-              <input v-model="form.title" type="text" class="form-control" name="title">
+              <input
+                v-model="form.title"
+                type="text"
+                class="form-control"
+                :class="{ 'is-invalid': form.errors.has('title') }"
+                name="title"
+              >
+              <has-error :form="form" field="title" />
             </div>
+
+            <no-ssr>
+              <label>Date</label>
+              <date-picker v-model="form.pubDate"
+                           class="form-control"
+                           :class="{ 'is-invalid': form.errors.has('pubDate') }"
+                           format="MM/DD/YYYY h:i:s" />
+              <has-error :form="form" field="pubDate" />
+            </no-ssr>
 
             <ul class="d-grid gap-4 my-5 list-unstyled">
               <li class="d-flex gap-4">
@@ -19,19 +35,26 @@
                   <nuxt-img
                     class="mb-3"
                     :src="form.image || '/news-default.png'"
-                    sizes="sm:100vw md:50vw lg:400px" />
+                    sizes="sm:100vw md:50vw lg:400px"
+                  />
                   <div class="input-group-append">
-                    <input type="text" class="form-control invisible" name="Image" v-model="form.image">
-                    <GlobalImageUpload @file-uploaded="form.image = $event"/>
+                    <input v-model="form.image" type="text" class="form-control invisible" name="Image">
+                    <GlobalImageUpload @file-uploaded="form.image = $event" />
                   </div>
                 </div>
               </li>
               <div class="form-group">
                 <label>Content</label>
-                <textarea v-model="form.content" type="text" class="form-control" name="content" />
+                <textarea
+                  v-model="form.content"
+                  type="text"
+                  class="form-control"
+                  :class="{ 'is-invalid': form.errors.has('content') }"
+                  name="content" />
+                <has-error :form="form" field="content" />
               </div>
             </ul>
-            <button class="btn btn-lg btn-primary mt-5 w-100">
+            <button class="btn btn-lg btn-primary mt-5 w-100" :disabled="loading">
               Save
             </button>
           </form>
@@ -43,28 +66,36 @@
 
 <script>
 
+import Form from 'vform'
+
 export default {
   name: 'Edit',
   props: {
     news: {
       type: Object,
       required: true
-    },
+    }
   },
   data: that => ({
-    form: {
+    form: new Form({
       id: that.news.id,
       title: that.news.title,
       content: that.news.content,
-      image: that.news.image,
-    },
-    loading: false,
+      pubDate: that.$moment(that.pubDate).format('YYYY/MM/DD HH:mm'),
+      image: that.news.image
+    }),
+    loading: false
   }),
   methods: {
-    save() {
+    async save () {
       this.loading = true
 
-      this.$store.dispatch('news/updateNews', { news: this.form })
+      try {
+        await this.$store.dispatch('news/updateNews', { news: this.form })
+        this.$emit('close-modal')
+      } catch (e) {
+        this.form.errors.set(e.response.data.errors)
+      }
 
       this.loading = false
     }

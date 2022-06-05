@@ -8,7 +8,7 @@ class CreateNewsRequest extends FormRequest
 {
     public function authorize()
     {
-        return true;
+        return \Auth::user()->is_admin;
     }
 
     public function rules()

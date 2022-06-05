@@ -10,16 +10,31 @@
       </div>
     </section>
 
+    <div>
+      <button v-if="isAdmin" type="button" class="btn btn-lg btn-primary" @click.prevent="createNewsDialog()">
+        Create New
+      </button>
+    </div>
+
+    <DialogsNewsCreate
+      v-if="dialogs.createNews"
+      @close-modal="dialogs.createNews = false"
+    />
     <DialogsNewsShow
       v-if="dialogs.showNews"
       :news="newsData"
       @close-modal="dialogs.showNews = false"
     />
+    <DialogsNewsEdit
+      v-if="dialogs.editNews"
+      :news="newsData"
+      @close-modal="dialogs.editNews = false"
+    />
 
     <div class="album py-5 bg-light">
       <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-          <div v-for="cur_news in publishedNews" :key="cur_news.id" class="col mb-3">
+          <div v-for="cur_news in news" :key="cur_news.id" class="col mb-3">
             <p class="text-center font-weight-bold">
               {{ cur_news.title }}
             </p>
@@ -31,8 +46,19 @@
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <button v-if="user" type="button" class="btn btn-sm btn-outline-secondary" @click.prevent="showNewsDialog(cur_news)">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" @click.prevent="showNewsDialog(cur_news)">
                       View
+                    </button>
+                    <button v-if="isAdmin" type="button" class="btn btn-sm btn-outline-secondary" @click.prevent="editNewsDialog(cur_news)">
+                      Edit
+                    </button>
+                    <button v-if="isAdmin"
+                            type="button"
+                            class="btn btn-sm btn-outline-secondary"
+                            :disabled="loading"
+                            @click.prevent="deleteNews(cur_news)"
+                    >
+                      Delete
                     </button>
                   </div>
                   <small class="text-muted">9 mins</small>
@@ -51,17 +77,20 @@ import Vue from 'vue'
 import { mapGetters } from 'vuex'
 
 export default Vue.extend({
-  name: 'IndexPage',
+  name: 'News',
 
   data: () => ({
     dialogs: {
-      showNews: false
+      showNews: false,
+      editNews: false,
+      createNews: false
     },
-    newsData: null
+    newsData: null,
+    loading: false
   }),
   computed: {
-    publishedNews () {
-      return this.news.filter(el => new Date(el.pubDate).getTime() <= new Date().getTime())
+    isAdmin () {
+      return this.user?.is_admin
     },
     ...mapGetters({
       user: 'auth/user',
@@ -79,6 +108,26 @@ export default Vue.extend({
     showNewsDialog (news) {
       this.dialogs.showNews = true
       this.newsData = news
+    },
+    editNewsDialog (news) {
+      this.dialogs.editNews = true
+      this.newsData = news
+    },
+    async deleteNews (news) {
+      this.loading = true
+
+      try {
+        if (confirm('Are yuo sure you want to delete this record?')) {
+          await this.$store.dispatch('news/deleteNews', { news })
+        }
+      } catch (e) {
+        console.log(e.response.data)
+      }
+
+      this.loading = false
+    },
+    createNewsDialog () {
+      this.dialogs.createNews = true
     }
   }
 })

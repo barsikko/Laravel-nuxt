@@ -41,6 +41,8 @@ class NewsController extends Controller
 
     public function destroy(News $news): void
     {
+        \Gate::authorize('delete-news');
+
         $news->delete();
     }
 }
