@@ -26,6 +26,10 @@
 - ./vendor/bin/sail artisan migrate
 - ./vendor/bin/sail artisan db:seed
 - php artisan static:link
+- npm tun dev
 
-Доступ в лк: admin@admin.com password
+Доступ в лк: 
+- admin@admin.com 
+- password
+
 Приложение доступно по адресу http://127.0.0.1:3000
